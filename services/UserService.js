@@ -25,7 +25,9 @@ class UserService {
 
         const userDto = new UserDto(user)
         const tokens = TokenService.generateTokens({...userDto})
+
         await TokenService.saveToken(userDto.id, tokens.refreshToken)
+        // await ProfileService.createProfile()
 
         return {...tokens, user: userDto}
     }
@@ -34,7 +36,7 @@ class UserService {
         console.log(email)
         const candidate = await User.deleteOne({email})
         if (!candidate) {
-            throw ApiError (`Пользователя с почтовым адресом ${email} не существует`)
+            throw ApiError.BadRequest (`Пользователя с почтовым адресом ${email} не существует`)
         }
         return candidate
     }
@@ -48,7 +50,7 @@ class UserService {
             console.log(email, password)
             const isPassEquals = await bcrypt.compare(password, user.password)
             if (!isPassEquals) {
-                throw ApiError (`Неверный пароль`)
+                throw ApiError.BadRequest (`Неверный пароль`)
             }
             const userDto = new UserDto(user)
             const tokens = TokenService.generateTokens({...userDto})

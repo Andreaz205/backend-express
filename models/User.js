@@ -5,6 +5,7 @@ const User = new mongoose.Schema({
     password: { type: String, required: true},
     isActivated: {type: Boolean, default: false},
     activatedLink: {type: String},
+    status:{type:String}
 
 })
 
